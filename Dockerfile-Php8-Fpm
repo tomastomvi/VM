@@ -1,0 +1,21 @@
+FROM php:8.3-fpm
+
+# Pacotes essenciais
+RUN apt-get update && apt-get install -y \
+    git \
+    unzip \
+    libzip-dev \
+    && docker-php-ext-install \
+    pdo \
+    pdo_mysql \
+    zip \
+    && apt-get clean
+
+# Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+
+WORKDIR /var/www/html
+
+EXPOSE 9000
+
+CMD ["php-fpm"]
